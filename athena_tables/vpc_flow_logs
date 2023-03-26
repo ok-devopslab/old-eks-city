@@ -1,0 +1,46 @@
+CREATE EXTERNAL TABLE IF NOT EXISTS `vpc_flow_logs` (
+version int,
+account string,
+interfaceid string,
+sourceaddress string,
+destinationaddress string,
+sourceport int,
+destinationport int,
+protocol int,
+numpackets int,
+numbytes bigint,
+starttime int,
+endtime int,
+action string,
+logstatus string,
+vpcid string,
+subnetid string,
+instanceid string,
+tcpflags int,
+type string,
+pktsrcaddr string,
+pktdstaddr string,
+aws_region string,
+azid string,
+sublocationtype string,
+sublocationid string,
+pktsrcawsservice string,
+pktdstawsservice string,
+flowdirection string,
+trafficpath string
+)
+PARTITIONED BY (region string, day string)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ' '
+LOCATION 's3://ccb-cua-dev-vpc-flow-logs-3126919/AWSLogs/888330225566/vpcflowlogs/'
+TBLPROPERTIES
+(
+"skip.header.line.count"="1",
+"projection.enabled" = "true",
+"projection.region.type" = "enum",
+"projection.region.values" = "us-east-2",
+"projection.day.type" = "date",
+"projection.day.range" = "2021/01/01,NOW",
+"projection.day.format" = "yyyy/MM/dd",
+"storage.location.template" = "s3://ccb-cua-dev-vpc-flow-logs-3126919/AWSLogs/888330225566/vpcflowlogs/${region}/${day}"
+)
